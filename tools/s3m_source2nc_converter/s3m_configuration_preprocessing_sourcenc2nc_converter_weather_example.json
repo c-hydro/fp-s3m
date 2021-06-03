@@ -1,0 +1,238 @@
+{
+  "algorithm": {
+    "general": {
+      "title": "S3M TOOL SOURCE2NC CONVERTER",
+      "web-site": "",
+      "source": "Python library developed by CIMA Research Foundation",
+      "history": "1.0.0 [20210603]",
+      "project-info": "S3M - CIMA's Cryospheric Model",
+      "algorithm": "Source2NC converter and resampler preprocessing tool"
+    },
+    "ancillary": {
+      "domain_name": "Lombardia",
+      "SQA_ground_and_snow": [0,1]
+    },
+    "flags": {
+      "cleaning_dynamic_ancillary": true,
+      "cleaning_dynamic_data": true,
+      "cleaning_dynamic_tmp": true
+    },
+    "template": {
+      "domain_name": "string_domain_name",
+      "source_file_datetime_generic": "%Y%m%d%H%M",
+      "source_file_datetime_generic_w_seconds": "%Y%m%d%H%M%S",
+      "source_folder_datetime_generic": "%Y/%m/%d/",
+      "source_file_datetime_generic_daily": "%Y%m%d%H%M",
+      "source_file_datetime_evt": "%Y%m%d",
+      "source_folder_datetime_evt": "%Y/%m/",
+      "ancillary_file_datetime_generic": "%Y%m%d%H%M",
+      "ancillary_folder_datetime_generic": "%Y/%m/%d/",
+      "destination_file_datetime_generic": "%Y%m%d%H%M",
+      "destination_folder_datetime_generic": "%Y/%m/%d/"
+    }
+  },
+  "data": {
+    "static" : {
+      "source": {
+        "Terrain": {
+          "folder_name": "/home/italy_grid_500m/",
+          "file_name": "DEM_Italy.tif"
+        },
+        "Grid_2": {
+          "xll": 6.59,
+          "yll": 35.99,
+          "res": 0.01,
+          "nrows": 1200,
+          "ncols": 1150,
+          "nodata_value": -9999
+        }
+      },
+      "destination": {
+        "Terrain": {
+          "folder_name": "/home/s3m_domains/{domain_name}/",
+          "file_name": "Terrain_Data.nc",
+          "file_compression": true,
+          "file_type": "netcdf",
+          "file_coords": {"x":  "Longitude", "y":  "Latitude"},
+          "resolution_round": 6,
+          "nodata_value": -9999
+        }
+      }
+    },
+    "dynamic": {
+      "source": {
+        "__comment__" : "file_type: binary, netcdf, tiff, mat",
+        "Rain": {
+          "var_compute": true,
+          "var_name": null,
+          "var_scale_factor": 1,
+          "folder_name": "/home/ground/{source_folder_datetime_generic}",
+          "file_name": "MCM_{source_file_datetime_generic_w_seconds}.tif",
+          "file_compression": false,
+          "file_geo_reference": null,
+          "file_type": "tiff",
+          "file_coords": null,
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "AirTemperature": {
+          "var_compute": true,
+          "var_name": "a2dTmap",
+          "var_scale_factor": 1,
+          "folder_name": "/home/{source_folder_datetime_generic}",
+          "file_name": "air_temperature_italy_{source_file_datetime_generic}.mat",
+          "file_compression": false,
+          "file_geo_reference": null,
+          "file_type": "mat",
+          "ancillary_georef_mat": {"res_x": "fLonStep","res_y":  "fLatStep", "grid_lat":  "a2dTemp_LAT", "grid_lon":  "a2dTemp_LON"},
+          "file_coords": null,
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "IncRadiation": {
+          "var_compute": true,
+          "var_name": "Incoming_Radiation",
+          "var_scale_factor": 1,
+          "folder_name": "/home/national_grid/{source_folder_datetime_generic}",
+          "file_name": "s3m.italy-grid.rad_rh.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "RelHumidity": {
+          "var_compute": true,
+         "var_name": "Relative_Humidity",
+          "var_scale_factor": 1,
+          "folder_name": "/home/national_grid/{source_folder_datetime_generic}",
+          "file_name": "s3m.italy-grid.rad_rh.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "Wind": {
+          "var_compute": false,
+         "var_name": "Wind",
+          "var_scale_factor": 1,
+          "folder_name": "/home/weather_stations/{source_folder_datetime_generic}",
+          "file_name": "s3m.italy-grid.rad_rh.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "AirPressure": {
+          "var_compute": false,
+         "var_name": "AirPressure",
+          "var_scale_factor": 1,
+          "folder_name": "/home/weather_stations/{source_folder_datetime_generic}",
+          "file_name": "s3m.italy-grid.rad_rh.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "Albedo": {
+          "var_compute": false,
+         "var_name": "Albedo",
+          "var_scale_factor": 1,
+          "folder_name": "/home/weather_stations/{source_folder_datetime_generic}",
+          "file_name": "s3m.italy-grid.rad_rh.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "SnowHeight": {
+          "var_compute": false,
+         "var_name": "Snow_Height",
+          "var_scale_factor": 1,
+          "folder_name": "/home/{source_folder_datetime_generic}",
+          "file_name": "s3m.hs_map_kernel.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "SnowKernel": {
+          "var_compute": false,
+         "var_name": "Snow_Kernel",
+          "var_scale_factor": 1,
+          "folder_name": "/home/snow_maps/{source_folder_datetime_generic}",
+          "file_name": "s3m.hs_map_kernel.{source_file_datetime_generic}.nc.gz",
+          "file_compression": true,
+          "file_geo_reference": "Terrain",
+          "file_type": "netcdf",
+          "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "SCA": {
+          "var_compute": false,
+         "var_name": null,
+          "var_scale_factor": 1,
+          "folder_name": "/home/snow_maps/{source_folder_datetime_generic}",
+          "file_name": "blended_snow_{source_file_datetime_generic}.tif",
+          "file_compression": false,
+          "file_geo_reference": null,
+          "file_type": "tiff",
+          "file_coords": null,
+          "file_frequency": "H",
+          "compute_quality": false
+        },
+        "SQA": {
+         "var_compute": false,
+         "compute_quality_from_SCA": false,
+         "var_name": null,
+          "var_scale_factor": 1,
+          "folder_name": "",
+          "file_name": "",
+          "file_compression": false,
+          "file_geo_reference": null,
+          "file_type": "",
+          "file_coords": null,
+          "file_frequency": "H",
+          "compute_quality": false
+        }
+      },
+      "ancillary": {
+        "folder_name": "/home/s3m_domains/{domain_name}/{ancillary_folder_datetime_generic}",
+        "file_name": "MeteoData_{ancillary_file_datetime_generic}.workspace"
+      },
+      "destination": {
+        "folder_name": "/home/s3m_domains/{domain_name}/{destination_folder_datetime_generic}",
+        "file_name": "MeteoData_{destination_file_datetime_generic}.nc",
+        "file_geo_reference": "Terrain",
+        "file_compression": true
+      }
+    }
+  },
+  "log": {
+    "folder_name": "/home/converter_and_resampler/",
+    "file_name": "s3m_preprocessing_source2nc_converter_and_resampler_{domain_name}_weather.txt",
+    "file_history": true
+  },
+   "time": {
+    "time_run": null,
+    "time_start": null,
+    "time_end": null,
+    "time_period": 27,
+    "time_frequency": "H",
+    "time_rounding": "H",
+     "time_reverse": false
+  }
+}
+
