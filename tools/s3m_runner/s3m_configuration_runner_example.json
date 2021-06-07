@@ -1,0 +1,127 @@
+{
+  "algorithm": {
+    "general": {
+      "title": "TOOL RUNNER",
+      "web-site": "",
+      "source": "Python library developed by CIMA Research Foundation",
+      "history": "1.0.0 [20210607]",
+      "project-info": "S3M - CIMA's Cryospheric Model",
+      "algorithm": "S3M runner",
+      "s3m_version": "5.1.1"
+    },
+    "ancillary": {
+      "domain_name": "Lombardia",
+      "tag_sim_start_and_restart": "datetime_start_restart"
+    },
+    "flags": {
+    },
+    "template": {
+      "domain_name": "string_domain_name",
+      "source_file_datetime_generic": "%Y%m%d%H%M",
+      "source_file_datetime_generic_daily": "%Y%m%d",
+      "source_file_datetime_generic_w_seconds": "%Y%m%d%H%M%S",
+      "source_folder_datetime_generic": "%Y/%m/%d/",
+      "destination_file_datetime_generic": "%Y%m%d%H%M",
+      "destination_folder_datetime_generic": "%Y/%m/%d/",
+      "model_datetime_generic": "%Y%m%d%H%M",
+      "datetime_start_restart": "%Y%m%d%H%M"
+    }
+  },
+  "data": {
+    "infofile" : {
+      "source": {
+          "folder_name": "/home/s3m_obs/",
+          "file_name": "s3m_obs_template.txt"
+      },
+      "destination": {
+          "folder_name": "/home/s3m_obs/run_{source_file_datetime_generic}/{domain_name}/",
+          "file_name": "s3m_obs_{domain_name}.txt"
+      }
+    },
+    "exe" : {
+      "source": {
+          "folder_name": "/home/exe_s3m/",
+          "file_name": "S3M_Model_V5_1_1.x"
+      },
+      "destination": {
+          "folder_name": "/home/run_{source_file_datetime_generic}/{domain_name}/",
+          "file_name": "S3M_Model_V5_1_1.x"
+      }
+    }
+  },
+  "S3M_Info": {
+    "flags": {
+      "sDomainName": "{domain_name}",
+      "iFlagDebugSet": 0,
+      "iFlagDebugLevel": 3,
+      "iFlagTypeData_Forcing_Gridded": 3,
+      "iFlagTypeData_Updating_Gridded": 3,
+      "iFlagTypeData_Ass_SWE_Gridded": 3,
+      "iFlagRestart": 1,
+      "iFlagSnowAssim": 1,
+      "iFlagSnowAssim_SWE": 0,
+      "iFlagIceMassBalance": 0,
+      "iFlagThickFromTerrData": 1,
+      "iFlagGlacierDebris": 0,
+      "iFlagOutputMode": 1,
+      "iFlagAssOnlyPos": 1
+    },
+    "geographic_info": {
+      "a1dGeoForcing": [-9999, -9999],
+      "a1dResForcing": [-9999, -9999],
+      "a1iDimsForcing": [-9999, -9999]
+    },
+    "dt_info": {
+      "iSimLength": null,
+      "iDtModel": 3600,
+      "iDtData_Forcing": 3600,
+      "iDtData_Output": 3600,
+      "iDtData_Updating": 3600,
+      "iDtData_AssSWE": 3600
+    },
+    "time_info": {
+      "sTimeStart": null,
+      "sTimeRestart": null
+    },
+    "path_info": {
+      "sPathData_Static_Gridded": "/home/static/s3m_domains/{domain_name}/",
+      "sPathData_Forcing_Gridded": "/home/s3m_domains/{domain_name}/$yyyy/$mm/$dd/",
+      "sPathData_Updating_Gridded": "/home/snow_maps/s3m_domains/{domain_name}/$yyyy/$mm/$dd/",
+      "sPathData_Output_Gridded": "/home/s3m_obs/{domain_name}/$yyyy/$mm/$dd/",
+      "sPathData_Restart_Gridded": "/home/s3m_obs/{domain_name}/$yyyy/$mm/$dd/",
+      "sPathData_SWE_Assimilation_Gridded": ""
+    },
+    "s3m_parameters": {
+      "a1dArctUp": [1.1, 1.1, 1.1, 1.1],
+      "a1dAltRange": [1500, 2000, 2500],
+      "iGlacierValue": 1,
+      "dRhoSnowFresh": 200,
+      "dRhoSnowMax": 400,
+      "dRhoSnowMin": 67.9,
+      "dSnowQualityThr": 0.3,
+      "dMeltingTRef": 1,
+      "dIceMeltingCoeff": 1,
+      "iSWEassInfluence": 6,
+      "dWeightSWEass": 0.25,
+      "dRefreezingSc": 1.0,
+      "dModFactorRadS": 1.125,
+      "sWYstart": "09",
+      "dDebrisThreshold": 0.2,
+      "iDaysAvgTSuppressMelt": 5
+    }
+  },
+  "log": {
+    "folder_name": "/home/obs/run_{source_file_datetime_generic}/{domain_name}/",
+    "file_name": "s3m_runner_{domain_name}.txt",
+    "file_history": true
+  },
+   "time": {
+    "time_run": null,
+    "time_start": null,
+    "time_end": null,
+    "time_period": 120,
+    "time_frequency": "H",
+    "time_rounding": "H",
+     "round_to_previous_midnight": true
+  }
+}
