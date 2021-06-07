@@ -28,7 +28,7 @@ script_file='/home/fp-s3m/tools/s3m_source2nc_converter/s3m_tool_preprocessing_s
 settings_algorithm='/home/s3m_configuration_preprocessing_sourcenc2nc_converter_weather.json'
 
 # Get information (-u to get gmt time)
-time_now=$(date -u +"%Y-%m-%d %H:00" "1 hour ago")
+time_now=$(date -u +"%Y-%m-%d %H:00" -d "1 hour ago")
 #time_now='2021-06-03 13:14' # DEBUG
 #-----------------------------------------------------------------------------------------
 
