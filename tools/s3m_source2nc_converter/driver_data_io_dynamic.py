@@ -95,6 +95,7 @@ class DriverDynamic:
         self.file_frequency_tag = 'file_frequency'
         self.domain_tag = 'domain_name'
         self.var_compute_quality_tag = 'compute_quality'
+        self.var_decimal_digits_tag = 'decimal_digits'
 
         self.alg_template_list = list(self.alg_template_tags.keys())
         self.var_name_obj = self.define_var_name(src_dict)
@@ -303,9 +304,11 @@ class DriverDynamic:
         file_coords = var_dict[self.file_coords_tag]
         file_freq = var_dict[self.file_frequency_tag]
         compute_quality = var_dict[self.var_compute_quality_tag]
+        var_decimal_digits = var_dict[self.var_decimal_digits_tag]
 
         return var_compute, var_name, var_scale_factor, \
-               file_compression, file_geo_reference, file_type, file_coords, file_freq, compute_quality
+               file_compression, file_geo_reference, file_type, file_coords, file_freq, compute_quality, \
+               var_decimal_digits
     # -------------------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------------------
@@ -439,7 +442,8 @@ class DriverDynamic:
                 log_stream.info(' ----> Variable "' + var_name + '" ... ')
 
                 var_compute, var_tag, var_scale_factor, file_compression, \
-                    file_geo_reference, file_type, file_coords, file_freq, compute_quality = self.extract_var_fields(src_dict[var_name])
+                    file_geo_reference, file_type, file_coords, file_freq, compute_quality, var_decimal_digits \
+                    = self.extract_var_fields(src_dict[var_name])
                 var_file_path_src = file_path_obj_src[var_name]
 
                 if var_compute:
@@ -577,6 +581,9 @@ class DriverDynamic:
                                 #Sanity check to remove nans
                                 var_da_masked.values = \
                                     np.where(np.isnan(var_da_masked.values), var_nodata, var_da_masked.values)
+
+                                #Round
+                                var_da_masked.values = np.round(var_da_masked.values, var_decimal_digits)
 
                                 # plt.figure(1)
                                 # plt.imshow(var_da_dst.values[:, :, 0])

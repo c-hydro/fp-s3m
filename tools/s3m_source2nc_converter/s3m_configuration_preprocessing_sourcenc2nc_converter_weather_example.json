@@ -73,7 +73,8 @@
           "file_type": "tiff",
           "file_coords": null,
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "AirTemperature": {
           "var_compute": true,
@@ -87,7 +88,8 @@
           "ancillary_georef_mat": {"res_x": "fLonStep","res_y":  "fLatStep", "grid_lat":  "a2dTemp_LAT", "grid_lon":  "a2dTemp_LON"},
           "file_coords": null,
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "IncRadiation": {
           "var_compute": true,
@@ -100,7 +102,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "RelHumidity": {
           "var_compute": true,
@@ -113,7 +116,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "Wind": {
           "var_compute": false,
@@ -126,7 +130,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "AirPressure": {
           "var_compute": false,
@@ -139,7 +144,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "Albedo": {
           "var_compute": false,
@@ -152,7 +158,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "SnowHeight": {
           "var_compute": false,
@@ -165,7 +172,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "SnowKernel": {
           "var_compute": false,
@@ -178,7 +186,8 @@
           "file_type": "netcdf",
           "file_coords": {"x":  "longitude", "y":  "latitude", "time":  "time"},
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "SCA": {
           "var_compute": false,
@@ -191,7 +200,8 @@
           "file_type": "tiff",
           "file_coords": null,
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         },
         "SQA": {
          "var_compute": false,
@@ -205,7 +215,8 @@
           "file_type": "",
           "file_coords": null,
           "file_frequency": "H",
-          "compute_quality": false
+          "compute_quality": false,
+          "decimal_digits": 3
         }
       },
       "ancillary": {
