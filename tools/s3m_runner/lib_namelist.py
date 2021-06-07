@@ -79,7 +79,7 @@ def modify_namelist(namelist_default, data_settings_dict, template,
 
             #handle simulation length
             if (variable_name == "iSimLength") & (variable_value is None):
-                variable_value = time_range.size - 1
+                variable_value = time_range.size
 
             #handle simulation start and end
             if (variable_name == "sTimeStart") & (variable_value is None):
