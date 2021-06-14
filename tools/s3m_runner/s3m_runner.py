@@ -1,7 +1,7 @@
 """
 S3M Runner Tool
-__date__ = '20210607'
-__version__ = '1.0.0'
+__date__ = '20210615'
+__version__ = '1.0.1'
 __author__ =
         'Francesco Avanzi' (francesco.avanzi@cimafoundation.org',
         'Fabio Delogu' (fabio.delogu@cimafoundation.org'
@@ -12,6 +12,7 @@ General command line:
 python s3m_runner.py -settings_file "configuration.json" -time "2021-04-20 22:33" -domain "Lombardia"
 
 Version(s):
+20210614 (1.0.1)
 20210607 (1.0.0) --> First release
 """
 # -------------------------------------------------------------------------------------
@@ -121,31 +122,13 @@ def main():
                                                data_settings['algorithm']['ancillary'])
 
     # -------------------------------------------------------------------------------------
-    # Copy executable and nc_library_path to folder
-    if {'folder_name', 'file_name'} == set(list(data_settings['data']['exe']['source'].keys())):
-        if {'folder_name', 'file_name'} == set(list(data_settings['data']['exe']['destination'].keys())):
-
-            path_src = os.path.join(data_settings['data']['exe']['source']['folder_name'],
-                                   data_settings['data']['exe']['source']['file_name'])
-            path_src = fill_tags2string(path_src, data_settings['algorithm']['template'], folder_tag)
-            path_dst = os.path.join(data_settings['data']['exe']['destination']['folder_name'],
-                                   data_settings['data']['exe']['destination']['file_name'])
-            path_dst = fill_tags2string(path_dst, data_settings['algorithm']['template'],folder_tag)
-            copy_file(path_src, path_dst)
-            path_dst_exe = path_dst
-
-        else:
-            log_stream.error(' ===> folder destination for exe file missing in JSON config!')
-            raise NotImplemented('Check configuration file')
-
-    else:
-        log_stream.error(' ===> folder and/or file name for source exe file missing in JSON config!')
-        raise NotImplemented('Check configuration file')
-    # -------------------------------------------------------------------------------------
-
-    # -------------------------------------------------------------------------------------
     # Run model
-    os.system(path_dst_exe + " " + path_namelist_dst)
+    path_exe = os.path.join(data_settings['data']['exe']['source']['folder_name'],
+                            data_settings['data']['exe']['source']['file_name'])
+    path_run = data_settings['data']['folder_run']
+    path_run = fill_tags2string(path_run, data_settings['algorithm']['template'], folder_tag)
+    os.chdir(path_run)
+    os.system(path_exe + " " + path_namelist_dst)
 
     # -------------------------------------------------------------------------------------
     # Info algorithm

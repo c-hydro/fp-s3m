@@ -4,7 +4,7 @@
       "title": "TOOL RUNNER",
       "web-site": "",
       "source": "Python library developed by CIMA Research Foundation",
-      "history": "1.0.0 [20210607]",
+      "history": "1.0.1 [20210615]",
       "project-info": "S3M - CIMA's Cryospheric Model",
       "algorithm": "S3M runner",
       "s3m_version": "5.1.1"
@@ -40,14 +40,11 @@
     },
     "exe" : {
       "source": {
-          "folder_name": "/home/exe_s3m/",
-          "file_name": "S3M_Model_V5_1_1.x"
-      },
-      "destination": {
-          "folder_name": "/home/run_{source_file_datetime_generic}/{domain_name}/",
+          "folder_name": "/home/libraries/exe_s3m/",
           "file_name": "S3M_Model_V5_1_1.x"
       }
-    }
+    },
+    "folder_run": "/home/s3m_obs/run_{source_file_datetime_generic}/{domain_name}/"
   },
   "S3M_Info": {
     "flags": {
