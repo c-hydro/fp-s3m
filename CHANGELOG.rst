@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 1.1.0 (20211029)
+========================
+- Added s3m_merger to merge outputs from multiple domains into a reference grid (mostly useful for postprocessing and visualization)
+
 Version 1.0.1 (20210614)
 ========================
 - Modified s3m_runner.py and s3m_configuration_runner_example.json to start simulation w/o copying-pasting the s3m x file
