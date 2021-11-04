@@ -187,7 +187,8 @@ def main():
                     var_file_path, var_file_name = os.path.split(path_file)
                     var_file_name_tmp = 'tmp_' + var_file_name
                     path_file_tmp = os.path.join(var_file_path, var_file_name_tmp)
-                    copyfile(path_file, path_file_tmp)
+                    if os.path.exists(path_file):
+                        copyfile(path_file, path_file_tmp)
                     path_file = path_file_tmp
 
                     if path_file.endswith('.gz'):
