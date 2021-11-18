@@ -124,6 +124,7 @@ def main():
             tag_filled = {'layer': str(layer),
                           'outcome_sub_path_time': time_step,
                           'outcome_datetime': time_step}
+            tag_filled['layer'] = tag_filled['layer'].replace("_", "")
             output_dir = fill_tags2string(output_dir, data_settings['algorithm']['template'], tag_filled)
             os.makedirs(os.path.dirname(output_dir), exist_ok=True)
             logging.info(" --> Created output dir " + output_dir)
