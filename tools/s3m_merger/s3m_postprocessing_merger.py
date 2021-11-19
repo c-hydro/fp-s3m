@@ -264,6 +264,10 @@ def main():
                 # plt.savefig('debug_data_final.png')
                 # plt.close()
 
+                # we apply scale factor
+                data_this_layer = np.where(np.isnan(data_this_layer), data_this_layer,
+                                         data_this_layer * data_settings['data']['input']['scale_factor_output'][layer_i])
+
                 #We reindex this domain layer using the output grid
                 data_this_layer_in = \
                     xr.DataArray(data_this_layer,
@@ -295,6 +299,9 @@ def main():
             # plt.colorbar()
             # plt.savefig('layer_out_final.png')
             # plt.close()
+
+
+            #save output
             logging.info(" --> Write output for layer:" + layer + ' and time ' + time_step.strftime("%Y-%m-%d %H:%M"))
             layer_out = layer_out.astype(np.float32)
             with rio.open(output_dir, 'w', height=len(lat_out), width=len(lon_out), count=1, dtype='float32',

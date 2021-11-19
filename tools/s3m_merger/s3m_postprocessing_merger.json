@@ -47,7 +47,8 @@
       ],
       "summary_type": ["avg", "avg", null, "avg"],
       "freq_summary": "H",
-      "mask_layer": "SnowMask"
+      "mask_layer": "SnowMask",
+      "scale_factor_output": [1, 100, 1, 100]
     },
     "outcome": {
       "output_grid": "/home/italy_grid/DEM_Italy_200m_WGS84geog.tif",
