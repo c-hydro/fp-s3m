@@ -47,7 +47,8 @@
       ],
       "summary_type": ["avg", "avg", null, "avg"],
       "freq_summary": "H",
-      "mask_layer": "SnowMask",
+      "mask_layer": "SWE",
+      "mask_threshold": 5,      
       "scale_factor_output": [1, 100, 1, 100]
     },
     "outcome": {

@@ -10,7 +10,7 @@ __library__ = 's3m'
 General command line:
 ### python s3m_postprocessing_merger.py -settings_file s3m_postprocessing_merger.json -time "YYYY-MM-DD HH:MM"
 Version(s):
-20211029 (1.0.0) --> First release
+20211029 (1.0.0) --> First release.
 """
 # -------------------------------------------------------------------------------------
 
@@ -214,7 +214,7 @@ def main():
 
                         if data_settings['data']['input']['mask_layer'] is not None:
                             mask = np.flipud(data[data_settings['data']['input']['mask_layer']].values)
-                            data_this_layer_and_time[mask <= 0] = np.nan
+                            data_this_layer_and_time[mask <= data_settings['data']['input']['mask_threshold']] = np.nan
                             logging.info(
                                 " --> Applied mask to " + layer + " from " + path_file + " for domain " + domain + "time: " + time_file.strftime(
                                     "%Y-%m-%d %H:%M"))
