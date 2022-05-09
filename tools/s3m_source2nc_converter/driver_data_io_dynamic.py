@@ -3,8 +3,8 @@ Class Features
 
 Name:          driver_data_io_dynamic
 Author(s):     Francesco Avanzi (francesco.avanzi@cimafoundation.org), Fabio Delogu (fabio.delogu@cimafoundation.org)
-Date:          '20210603'
-Version:       '1.0.0'
+Date:          '20220509'
+Version:       '1.0.1'
 """
 
 ######################################################################################
@@ -41,7 +41,7 @@ import matplotlib.pylab as plt
 # -------------------------------------------------------------------------------------
 # Default definition(s)
 var_fields_accepted = [
-    "var_compute", "var_name", "var_scale_factor",
+    "var_compute", "var_name", "var_scale_factor", "var_shift",
     "folder_name", "file_name", "file_compression", "file_type", "file_frequency"]
 time_format_reference = '%Y-%m-%d'
 # -------------------------------------------------------------------------------------
@@ -86,6 +86,7 @@ class DriverDynamic:
         self.var_compute_tag = 'var_compute'
         self.var_name_tag = 'var_name'
         self.var_scale_factor_tag = 'var_scale_factor'
+        self.var_shift_tag = 'var_shift'
         self.file_name_tag = 'file_name'
         self.folder_name_tag = 'folder_name'
         self.file_compression_tag = 'file_compression'
@@ -298,6 +299,7 @@ class DriverDynamic:
         var_compute = var_dict[self.var_compute_tag]
         var_name = var_dict[self.var_name_tag]
         var_scale_factor = var_dict[self.var_scale_factor_tag]
+        var_shift = var_dict[self.var_shift_tag]
         file_compression = var_dict[self.file_compression_tag]
         file_geo_reference = var_dict[self.file_geo_reference_tag]
         file_type = var_dict[self.file_type_tag]
@@ -306,7 +308,7 @@ class DriverDynamic:
         compute_quality = var_dict[self.var_compute_quality_tag]
         var_decimal_digits = var_dict[self.var_decimal_digits_tag]
 
-        return var_compute, var_name, var_scale_factor, \
+        return var_compute, var_name, var_scale_factor, var_shift, \
                file_compression, file_geo_reference, file_type, file_coords, file_freq, compute_quality, \
                var_decimal_digits
     # -------------------------------------------------------------------------------------
@@ -441,7 +443,7 @@ class DriverDynamic:
 
                 log_stream.info(' ----> Variable "' + var_name + '" ... ')
 
-                var_compute, var_tag, var_scale_factor, file_compression, \
+                var_compute, var_tag, var_scale_factor, var_shift, file_compression, \
                     file_geo_reference, file_type, file_coords, file_freq, compute_quality, var_decimal_digits \
                     = self.extract_var_fields(src_dict[var_name])
                 var_file_path_src = file_path_obj_src[var_name]
@@ -505,7 +507,7 @@ class DriverDynamic:
                                     dim_name_time=self.dim_name_time,
                                     dims_order=self.dims_order_3d)
 
-                            elif file_type == 'tiff':
+                            elif file_type == 'tiff' or file_type == 'asc':
 
                                 var_da_src = read_data_tiff(
                                     var_file_path_out,
@@ -541,6 +543,18 @@ class DriverDynamic:
 
                             # Delete temporary file
                             os.remove(var_file_path_in)
+
+                            # Apply scale factor and shift to values
+                            if var_shift is not None:
+                                var_da_src.values=var_da_src.values + var_shift
+                            if var_scale_factor is not None:
+                                var_da_src.values=var_da_src.values / var_scale_factor
+
+                            #if var_shift is not None:
+                             #   var_da_src=var_da_src + var_shift
+                            #if var_scale_factor is not None:
+                             #   var_da_src=var_da_src / var_scale_factor
+
 
                             # Organize destination dataset
                             if var_da_src is not None:

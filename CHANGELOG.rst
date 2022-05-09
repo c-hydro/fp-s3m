@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 1.1.1 (20220509)
+========================
+- Added provision for shifting and scaling input data in the converter routine (e.g., convert Kelvin temperature to Celsius on the fly)
+
 Version 1.1.0 (20211029)
 ========================
 - Added s3m_merger to merge outputs from multiple domains into a reference grid (mostly useful for postprocessing and visualization)
