@@ -1,0 +1,49 @@
+{
+  "algorithm": {
+    "general": {
+      "title": "Output 2 NetCDF",
+      "web-site": "",
+      "source": "Python library developed by CIMA Research Foundation",
+      "history": "1.0.0 [20220705]",
+      "project-info": "S3M Postprocessing tools",
+      "algorithm": "Postprocessing tools by CIMA Research Foundation"
+    },
+    "template": {
+      "source_gridded_sub_path_time": "%Y/%m/%d/",
+      "source_gridded_datetime": "%Y%m%d%H%M",
+      "source_gridded_datetime_daily": "%Y%m%d",
+      "outcome_sub_path_time": "%Y/%m/%d/",
+      "outcome_datetime": "%Y%m%d%H%M",
+      "outcome_datetime_monthly": "%Y%m",
+      "variable_name": "string_layer"
+    }
+  },
+  "data": {
+    "input": {
+      "input_grid": "/home/DEM.tif",
+      "folder": "/home/{source_gridded_sub_path_time}",
+      "filename": "{variable_name}_{source_gridded_datetime_daily}110000.tif",
+      "variable_name": "SWE",
+      "file_compression": false,
+      "file_type": "tif"
+    },
+    "outcome": {
+      "output_grid": "/home/DEM.tif",
+      "folder": "/home/nc",
+      "filename": "{variable_name}_{outcome_datetime_monthly}.nc"
+    },
+    "log": {
+      "filename": "s3m_output2nc.txt",
+      "folder": "/home/output2nc_converter/"
+    }
+  },
+   "time": {
+    "time_run": null,
+    "time_start": null,
+    "time_end": null,
+    "time_period": 12,
+    "time_frequency": "M",
+    "time_rounding": "D",
+     "time_reverse": false
+  }
+}

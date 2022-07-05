@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 1.2.0 (20220705)
+========================
+- Added output2nc_converter to convert geotiff outputs of s3m_merger into monthly netCDF files.
+
 Version 1.1.1 (20220509)
 ========================
 - Added provision for shifting and scaling input data in the converter routine (e.g., convert Kelvin temperature to Celsius on the fly)
