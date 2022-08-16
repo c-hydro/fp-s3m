@@ -4,7 +4,7 @@
       "title": "Output 2 NetCDF",
       "web-site": "",
       "source": "Python library developed by CIMA Research Foundation",
-      "history": "1.0.0 [20220705]",
+      "history": "1.1.0 [20220811]",
       "project-info": "S3M Postprocessing tools",
       "algorithm": "Postprocessing tools by CIMA Research Foundation"
     },
@@ -21,29 +21,69 @@
   "data": {
     "input": {
       "input_grid": "/home/DEM.tif",
-      "folder": "/home/{source_gridded_sub_path_time}",
+      "folder": "/home/geotiff/{source_gridded_sub_path_time}",
       "filename": "{variable_name}_{source_gridded_datetime_daily}110000.tif",
       "variable_name": "SWE",
+      "variable_long_name": "Snow Water Equivalent",
+      "variable_standard_name": "Snow Water Equivalent",
+      "variable_unit": "mm w.e.",
+      "variable_scale_factor": 1,
       "file_compression": false,
-      "file_type": "tif"
+      "file_type": "tif",
+      "fill_value": -9999
     },
     "outcome": {
       "output_grid": "/home/DEM.tif",
-      "folder": "/home/nc",
+      "folder": "/home/output/output2nc",
       "filename": "{variable_name}_{outcome_datetime_monthly}.nc"
     },
     "log": {
-      "filename": "s3m_output2nc.txt",
-      "folder": "/home/output2nc_converter/"
+      "filename": "s3m_output2nc_ITSNOW.txt",
+      "folder": "/home/output2nc/"
     }
   },
    "time": {
     "time_run": null,
     "time_start": null,
     "time_end": null,
-    "time_period": 12,
+    "time_period": 1,
     "time_frequency": "M",
     "time_rounding": "D",
      "time_reverse": false
+  },
+  "crs": {
+    "code":"EPSG:4326",
+    "inverse_flattening": 298.257223563,
+    "longitude_of_prime_meridian": 0,
+    "grid_mapping_name": "latitude_longitude",
+    "semi_major_axis": 6378137,
+    "false_easting": 0,
+    "false_northing": 0
+  },
+  "global_attributes": {
+    "institution": "CIMA Research Foundation, via Armando Magliotto 2, 17100 Savona (Italy)",
+    "source": "",
+    "reference": "",
+    "featureType": "n/a",
+    "Conventions": "CF-1.8",
+    "keywords": "Snow",
+    "summary": "",
+    "title": "",
+    "acknowledgment": "",
+    "comment": "",
+    "creator_name": "Francesco Avanzi",
+    "creator_url": "https://www.cimafoundation.org/",
+    "creator_email": "info@cimafoundation.org",
+    "geospatial_lat_min": "35.1458396",
+    "geospatial_lat_max": "47.5925216",
+    "geospatial_lon_min": "6.4752167",
+    "geospatial_lon_max": "20.2621551",
+    "history": "n/a",
+    "license": "",
+    "naming_authority": "CIMA Research Foundation",
+    "project": "",
+    "publisher_name": "",
+    "publisher_url": "",
+    "publisher_email": "info@cimafoundation.org"
   }
 }

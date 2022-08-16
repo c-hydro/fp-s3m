@@ -1,7 +1,7 @@
 """
 S3M Postprocessing tools - output 2 netcdf file
-__date__ = '20220705'
-__version__ = '1.0.0'
+__date__ = '20220811'
+__version__ = '1.1.0'
 __author__ =
         'Francesco Avanzi (francesco.avanzi@cimafoundation.org'
         'Andrea Libertino (andrea.libertino@cimafoundation.org',
@@ -10,6 +10,8 @@ __library__ = 's3m'
 General command line:
 ### python s3m_postprocessing_output2nc_converter.py -settings_file s3m_postprocessing_output2nc_converter_example.json -time "YYYY-MM-DD HH:MM"
 Version(s):
+20220811 (1.1.0) --> Modified routine to export to netCDF for compatibility with QGIS and the NetCDF Climate and Forecast (CF)
+Metadata Conventions
 20220705 (1.0.0) --> First release.
 """
 # -------------------------------------------------------------------------------------
@@ -27,6 +29,7 @@ import os
 import matplotlib.pylab as plt
 from time import time, strftime, gmtime
 import matplotlib as mpl
+from netCDF4 import Dataset,date2num
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using non-interactive Agg backend')
     mpl.use('Agg')
@@ -43,8 +46,8 @@ from lib_postprocessing_output2nc_converter_io_generic import fill_tags2string, 
 # Algorithm information
 alg_project = 'S3M'
 alg_name = 'S3M Postprocessing tools - Output 2 NetCDF converter '
-alg_version = '1.0.0'
-alg_release = '2022-07-05'
+alg_version = '1.1.0'
+alg_release = '2022-08-11'
 alg_type = 'DataDynamic'
 time_format = '%Y-%m-%d %H:%M'
 # -------------------------------------------------------------------------------------
@@ -130,7 +133,7 @@ def main():
 
             #create target ndarray
             size_domain_in = (lat_in.__len__(), lon_in.__len__())
-            data_this_month = np.empty((size_domain_in[0], size_domain_in[1], time_period_this_month.__len__()))
+            data_this_month = np.empty((time_period_this_month.__len__(), size_domain_in[0], size_domain_in[1]))
             data_this_month[:] = np.nan
 
             #now load maps
@@ -166,7 +169,7 @@ def main():
                         else:
                             logging.warning(' --> WARNING! output ' + path_file + ' not found!')
 
-                    # carica
+                    # load
                     if data_settings['data']['input']['file_type'] == 'tif':
 
                         da_this_day, wide_this_day, high_this_day, proj_this_day, transform_this_day, \
@@ -192,7 +195,8 @@ def main():
                                                                 method='nearest')
 
                     # include in target ndarray
-                    data_this_month[:, :, time_i] = da_this_day_reindexed
+                    data_this_month[time_i, :, :] = np.flipud(da_this_day_reindexed)
+                    #this flipud is needed for compatibility w/ QGIS
 
                     # we remove tmp file
                     os.remove(path_file_tmp)  # which is also path_file
@@ -202,21 +206,92 @@ def main():
                     not_available_run = not_available_run + 1
 
 
-            #save to nc!
-            frcDS = xr.DataArray(data_this_month, dims=['lat', 'lon', 'time'],
-                                 coords={'lat': lat_out, 'lon': lon_out, 'time': time_period_this_month})
-            frcDS.name = data_settings['data']['input']['variable_name']
-            code = {data_settings['data']['input']['variable_name']: {"zlib": True, "complevel": 9, "_FillValue": -9999}}
+            #create nc file
             path_file_out = os.path.join(data_settings['data']['outcome']['folder'],
                                          data_settings['data']['outcome']['filename'])
             tag_filled = {'source_gridded_sub_path_time': time_step,
                           'outcome_datetime_monthly': time_step,
                           'variable_name': data_settings['data']['input']['variable_name']}
             path_file_out = fill_tags2string(path_file_out, data_settings['algorithm']['template'], tag_filled)
-            logging.info(' --> Nc file creation ...' + path_file_out)
-            frcDS.to_netcdf(path_file_out, format="NETCDF4", encoding=code)
-            logging.info(' --> Nc file creation ... DONE!')
+            ds = Dataset(path_file_out, 'w', format='NETCDF4')
 
+            #define dimensions
+            Dim_Lat = ds.createDimension('lat', lat_out.__len__())
+            Dim_Lon = ds.createDimension('lon', lon_out.__len__())
+            Dim_time = ds.createDimension('time', time_period_this_month.__len__())
+            Dim_crs = ds.createDimension('crs', 1)
+
+            # create crs variable
+            crs = ds.createVariable("crs", "c", ("crs",))
+            crs.inverse_flattening = data_settings['crs']['inverse_flattening']
+            crs.longitude_of_prime_meridian = data_settings['crs']['longitude_of_prime_meridian']
+            crs.grid_mapping_name = data_settings['crs']['grid_mapping_name']
+            crs.semi_major_axis = data_settings['crs']['semi_major_axis']
+            crs.code = data_settings['crs']['code']
+            crs.false_easting = data_settings['crs']['false_easting']
+            crs.false_northing = data_settings['crs']['false_northing']
+
+            #create lat lon variables
+            Longitude = ds.createVariable("Longitude", "d", ("lon",))
+            Longitude[:] = lon_out
+            Longitude.long_name = 'Longitude'
+            Longitude.standard_name = 'longitude'
+            Longitude.units = 'degrees_east'
+            Longitude.scale_factor = 1
+
+            Latitude = ds.createVariable("Latitude", "d", ("lat",))
+            Latitude[:] = np.flipud(lat_out) # this flipud is needed for compatibility w/ QGIS
+            Latitude.long_name = 'Latitude'
+            Latitude.standard_name = 'latitude'
+            Latitude.units = 'degrees_north'
+            Latitude.scale_factor = 1
+
+            #create time variable
+            Time = ds.createVariable("Time", "d", ("time",))
+            Time.units = "days since " + time_period_this_month[0].strftime("%Y-%m-%d %H:%M:%S")
+            Time.calendar = "proleptic_gregorian"
+            time_period_this_month_pydatetime = time_period_this_month.to_pydatetime()
+            Time[:] = date2num(time_period_this_month_pydatetime, Time.units)
+
+            #write global attributes
+            ds.institution = data_settings['global_attributes']['institution']
+            ds.source = data_settings['global_attributes']['source']
+            ds.reference = data_settings['global_attributes']['reference']
+            ds.featureType = data_settings['global_attributes']['featureType']
+            ds.Conventions = data_settings['global_attributes']['Conventions']
+            ds.keywords = data_settings['global_attributes']['keywords']
+            ds.summary = data_settings['global_attributes']['summary']
+            ds.title = data_settings['global_attributes']['title']
+            ds.acknowledgment = data_settings['global_attributes']['acknowledgment']
+            ds.comment = data_settings['global_attributes']['comment']
+            ds.creator_name = data_settings['global_attributes']['creator_name']
+            ds.creator_url = data_settings['global_attributes']['creator_url']
+            ds.creator_email = data_settings['global_attributes']['creator_email']
+            ds.geospatial_lat_min = data_settings['global_attributes']['geospatial_lat_min']
+            ds.geospatial_lat_max = data_settings['global_attributes']['geospatial_lat_max']
+            ds.geospatial_lon_min = data_settings['global_attributes']['geospatial_lon_min']
+            ds.geospatial_lon_max = data_settings['global_attributes']['geospatial_lon_max']
+            ds.history = data_settings['global_attributes']['history']
+            ds.license = data_settings['global_attributes']['license']
+            ds.naming_authority = data_settings['global_attributes']['naming_authority']
+            ds.project = data_settings['global_attributes']['project']
+            ds.publisher_name = data_settings['global_attributes']['publisher_name']
+            ds.publisher_url = data_settings['global_attributes']['publisher_url']
+            ds.publisher_email = data_settings['global_attributes']['publisher_email']
+
+            #save matrix with data now
+            Data = ds.createVariable(data_settings['data']['input']['variable_name'], "d", ("time", "lat", "lon",), \
+                                     zlib=True, fill_value=data_settings['data']['input']['fill_value'])
+            Data[:] = data_this_month
+            Data.grid_mapping = 'crs'
+            Data.coordinates = 'Longitude Latitude'
+            Data.long_name = data_settings['data']['input']['variable_long_name']
+            Data.standard_name = data_settings['data']['input']['variable_standard_name']
+            Data.units = data_settings['data']['input']['variable_unit']
+            Data.scale_factor = data_settings['data']['input']['variable_scale_factor']
+
+            ds.close()
+            print()
 
         else:
             raise IOError('Time frequency not supported. Please use monthly time frequency')

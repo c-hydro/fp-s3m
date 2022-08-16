@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 1.3.0 (20220811)
+========================
+- Modified output2nc_converter for compatibility with QGIS and the NetCDF Climate and Forecast (CF) conventions
+
 Version 1.2.0 (20220705)
 ========================
 - Added output2nc_converter to convert geotiff outputs of s3m_merger into monthly netCDF files.
