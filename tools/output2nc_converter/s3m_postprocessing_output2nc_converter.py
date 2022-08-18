@@ -217,8 +217,8 @@ def main():
             ds = Dataset(path_file_out, 'w', format='NETCDF4')
 
             #define dimensions
-            Dim_Lat = ds.createDimension('lat', lat_out.__len__())
-            Dim_Lon = ds.createDimension('lon', lon_out.__len__())
+            Dim_Lat = ds.createDimension('Latitude', lat_out.__len__())
+            Dim_Lon = ds.createDimension('Longitude', lon_out.__len__())
             Dim_time = ds.createDimension('time', time_period_this_month.__len__())
             Dim_crs = ds.createDimension('crs', 1)
 
@@ -234,19 +234,19 @@ def main():
             crs.false_northing = data_settings['crs']['false_northing']
 
             #create lat lon variables
-            lon = ds.createVariable("lon", "d", ("lon",), zlib=True)
-            lon[:] = lon_out
-            lon.long_name = 'Easting'
-            lon.standard_name = 'Easting'
-            lon.units = 'degrees'
-            lon.scale_factor = 1
+            Longitude = ds.createVariable("Longitude", "d", ("Longitude",), zlib=True)
+            Longitude[:] = lon_out
+            Longitude.long_name = 'Easting'
+            Longitude.standard_name = 'Easting'
+            Longitude.units = 'degrees'
+            Longitude.scale_factor = 1
 
-            lat = ds.createVariable("lat", "d", ("lat",), zlib=True)
-            lat[:] = np.flipud(lat_out) # this flipud is needed for compatibility w/ QGIS
-            lat.long_name = 'Northing'
-            lat.standard_name = 'Northing'
-            lat.units = 'degrees'
-            lat.scale_factor = 1
+            Latitude = ds.createVariable("Latitude", "d", ("Latitude",), zlib=True)
+            Latitude[:] = np.flipud(lat_out) # this flipud is needed for compatibility w/ QGIS
+            Latitude.long_name = 'Northing'
+            Latitude.standard_name = 'Northing'
+            Latitude.units = 'degrees'
+            Latitude.scale_factor = 1
 
             #create time variable
             Time = ds.createVariable("Time", "d", ("time",))
@@ -282,7 +282,7 @@ def main():
             ds.publisher_email = data_settings['global_attributes']['publisher_email']
 
             #save matrix with data now
-            Data = ds.createVariable(data_settings['data']['input']['variable_name'], "d", ("time", "lat", "lon",), \
+            Data = ds.createVariable(data_settings['data']['input']['variable_name'], "d", ("time", "Latitude", "Longitude",), \
                                      zlib=True, fill_value=data_settings['data']['input']['fill_value'])
             Data[:] = data_this_month
             Data.grid_mapping = 'crs'
