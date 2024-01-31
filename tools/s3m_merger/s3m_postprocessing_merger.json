@@ -7,7 +7,7 @@
       "title": "Mosaic outputs",
       "web-site": "",
       "source": "Python library developed by CIMA Research Foundation",
-      "history": "1.0.0 [20211029]",
+      "history": "1.1.0 [20240131]",
       "project-info": "S3M Postprocessing tools",
       "algorithm": "Postprocessing tools by CIMA Research Foundation"
     },

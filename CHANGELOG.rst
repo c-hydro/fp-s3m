@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 1.3.1 (20240131)
+========================
+- Modified s3m_merger to spell out the reference system of output geotiff (EPSG 4326)
+
 Version 1.3.0 (20220811)
 ========================
 - Modified output2nc_converter for compatibility with QGIS and the NetCDF Climate and Forecast (CF) conventions

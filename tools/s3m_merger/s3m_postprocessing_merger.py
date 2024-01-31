@@ -1,7 +1,7 @@
 """
 S3M Postprocessing tools - Mosaic outputs
-__date__ = '20211029'
-__version__ = '1.0.0'
+__date__ = '20240131'
+__version__ = '1.1.0'
 __author__ =
         'Francesco Avanzi (francesco.avanzi@cimafoundation.org'
         'Andrea Libertino (andrea.libertino@cimafoundation.org',
@@ -10,6 +10,7 @@ __library__ = 's3m'
 General command line:
 ### python s3m_postprocessing_merger.py -settings_file s3m_postprocessing_merger.json -time "YYYY-MM-DD HH:MM"
 Version(s):
+20240131 (1.1.0) --> Added explicit reference system for the output geotiff
 20211029 (1.0.0) --> First release.
 """
 # -------------------------------------------------------------------------------------
@@ -305,7 +306,7 @@ def main():
             logging.info(" --> Write output for layer:" + layer + ' and time ' + time_step.strftime("%Y-%m-%d %H:%M"))
             layer_out = layer_out.astype(np.float32)
             with rio.open(output_dir, 'w', height=len(lat_out), width=len(lon_out), count=1, dtype='float32',
-                               crs='+proj=latlong', transform=transform_domain, driver='GTiff', nodata=-9999) as out:
+                               crs='EPSG:4326', transform=transform_domain, driver='GTiff', nodata=-9999) as out:
                 out.write(layer_out, 1)
                 logging.info(
                     " --> Saved " + layer + "to " + output_dir)
